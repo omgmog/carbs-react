@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useRef, useState } from 'react';
+import 'bulma/css/bulma.min.css';
+
+import { foods } from './foods';
+
+import NavBar from './components/NavBar';
+import FoodSelector from './components/FoodSelector';
+import PortionSize from './components/PortionSize';
+import TotalCarbs from './components/TotalCarbs';
+
 
 function App() {
+  const [food,setFood] = useState(0);
+  const [portion,setPortion] = useState(0);
+
+  const portionRef = useRef(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='main'>
+      <NavBar />
+      <div className='section'>
+        <div className='container'>
+          <FoodSelector food={food} setFood={setFood} focusPortion={() => portionRef.current.focus()} foods={foods} />
+          <PortionSize portion={portion} setPortion={setPortion} fieldRef={portionRef}/>
+          <TotalCarbs food={food} foods={foods} portion={portion} />
+        </div>
+      </div>
+    
     </div>
   );
 }
