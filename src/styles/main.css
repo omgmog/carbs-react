@@ -1,0 +1,14 @@
+@import 'bulma/css/bulma.min.css';
+
+.main {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.section {
+  padding-top: 2rem;
+}
+
+.notification {
+  margin-top: 2rem;
+} 

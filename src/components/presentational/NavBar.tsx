@@ -1,4 +1,6 @@
-function NavBar() {
+import React from 'react';
+
+const NavBar: React.FC = () => {
     return (
         <nav className='navbar' role='navigation'>
             <div className="navbar-start">
@@ -9,7 +11,7 @@ function NavBar() {
                 </div>
             </div>
         </nav>
-    )
-}
+    );
+};
 
-export default NavBar;
+export default NavBar; 
