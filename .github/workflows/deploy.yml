@@ -41,4 +41,5 @@ jobs:
           branch: gh-pages
           folder: build
           clean: true
-          commit-message: "Deploy carbs-react to blog.omgmog.net/carbs-react" 
+          commit-message: "Deploy carbs-react to carbs.omgmog.net"
+          preserve: true 
