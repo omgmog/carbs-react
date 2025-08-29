@@ -18,7 +18,7 @@ describe("DoseRecommendation", () => {
       screen.getByLabelText(/high fat\/protein meal/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/current bg/i)).toBeInTheDocument();
-    expect(screen.getByText(/iob \(u\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/iob/i)).toBeInTheDocument();
   });
 
   test("displays dose recommendation section", () => {
@@ -28,19 +28,48 @@ describe("DoseRecommendation", () => {
     expect(screen.getByText(/now \(total\):/i)).toBeInTheDocument();
   });
 
-  test("shows injection plan", () => {
+  test("shows injection plan when there are multiple injections or delayed doses", async () => {
     renderWithProvider(<DoseRecommendation />);
 
+    // Add a large amount of carbs to trigger multiple injections (over max per shot)
+    const extraCarbsInput = screen.getByLabelText(/extra carbs/i);
+    await userEvent.type(extraCarbsInput, "150"); // Should exceed max single dose and split
+
+    expect(screen.getByText(/injection plan/i)).toBeInTheDocument();
+  });
+
+  test("does not show injection plan for simple single injections", async () => {
+    renderWithProvider(<DoseRecommendation />);
+
+    // Add moderate carbs that would result in a single injection
+    const extraCarbsInput = screen.getByLabelText(/extra carbs/i);
+    await userEvent.type(extraCarbsInput, "30");
+
+    // Should not show detailed injection plan for simple single injection
+    expect(screen.queryByText(/injection plan/i)).not.toBeInTheDocument();
+  });
+
+  test("shows injection plan for high fat/protein meals with delayed doses", async () => {
+    renderWithProvider(<DoseRecommendation />);
+
+    // Add some carbs and enable high fat/protein (which can trigger delayed doses)
+    const extraCarbsInput = screen.getByLabelText(/extra carbs/i);
+    await userEvent.type(extraCarbsInput, "50");
+    
+    const checkbox = screen.getByLabelText(/high fat\/protein meal/i);
+    await userEvent.click(checkbox);
+
+    // Should show injection plan due to potential delayed dosing
     expect(screen.getByText(/injection plan/i)).toBeInTheDocument();
   });
 
   test("displays dosing parameters", () => {
     renderWithProvider(<DoseRecommendation />);
 
-    expect(screen.getByText(/icr for breakfast:/i)).toBeInTheDocument();
-    expect(screen.getByText(/isf:/i)).toBeInTheDocument();
-    expect(screen.getByText(/target bg:/i)).toBeInTheDocument();
-    expect(screen.getByText(/max per shot:/i)).toBeInTheDocument();
+    expect(screen.getByText("ICR")).toBeInTheDocument();
+    expect(screen.getByText("ISF")).toBeInTheDocument();
+    expect(screen.getByText("Target BG")).toBeInTheDocument();
+    expect(screen.getByText("Max per shot")).toBeInTheDocument();
   });
 
   test("allows meal selection", async () => {
@@ -50,7 +79,6 @@ describe("DoseRecommendation", () => {
     await userEvent.selectOptions(mealSelect, "lunch");
 
     expect(mealSelect).toHaveValue("lunch");
-    expect(screen.getByText(/icr for lunch:/i)).toBeInTheDocument();
   });
 
   test("allows high fat/protein checkbox toggle", async () => {
@@ -109,12 +137,12 @@ describe("DoseRecommendation", () => {
   test("shows breakdown details when expanded", async () => {
     renderWithProvider(<DoseRecommendation />);
 
-    const breakdownSummary = screen.getByText(/breakdown/i);
+    const breakdownSummary = screen.getByText(/calculation details/i);
     await userEvent.click(breakdownSummary);
 
-    expect(screen.getByText(/carb bolus:/i)).toBeInTheDocument();
-    expect(screen.getByText(/correction:/i)).toBeInTheDocument();
-    expect(screen.getByText(/dinner add-on:/i)).toBeInTheDocument();
+    expect(screen.getByText("Carb bolus")).toBeInTheDocument();
+    expect(screen.getByText("Correction")).toBeInTheDocument();
+    expect(screen.getByText("High fat/protein add-on")).toBeInTheDocument();
   });
 
   test("displays carbs calculation summary", () => {

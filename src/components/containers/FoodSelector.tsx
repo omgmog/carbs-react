@@ -6,16 +6,20 @@ const FoodSelector: React.FC = () => {
   const { food, setFood, foods } = useFood();
 
   return (
-    <>
+    <div className="mb-6">
       <label className="block text-sm font-bold mb-1" htmlFor="food">
         Food type
       </label>
       <select
-        onChange={(e) => setFood(Number(e.target.value))}
-        value={food}
+        onChange={(e) => {
+          const value = e.target.value;
+          setFood(value === "" ? null : Number(value));
+        }}
+        value={food === null ? "" : food}
         id="food"
         className="block w-full rounded border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 p-2 mb-2"
       >
+        <option value="">No food</option>
         {(() => {
           // Group foods by their first tag
           const groups: { [tag: string]: { index: number; label: string }[] } =
@@ -42,19 +46,21 @@ const FoodSelector: React.FC = () => {
           ));
         })()}
       </select>
-      <p className="text-xs text-gray-600 mx-1">
-        <span>{foods[food]?.value}g</span> carbs per 100{" "}
-        {displayUnit(foods[food])}
-        <a
-          className="ml-2 text-blue-600 hover:underline text-xs float-right"
-          href="https://github.com/omgmog/carbs-react/edit/main/src/constants/foods.ts"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Add another food type?
-        </a>
-      </p>
-    </>
+      {food !== null && (
+        <p className="text-xs text-gray-600 mx-1">
+          <span>{foods[food]?.value}g</span> carbs per 100{" "}
+          {displayUnit(foods[food])}
+          <a
+            className="ml-2 text-blue-600 hover:underline text-xs float-right"
+            href="https://github.com/omgmog/carbs-react/edit/main/src/constants/foods.ts"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Add another food type?
+          </a>
+        </p>
+      )}
+    </div>
   );
 };
 

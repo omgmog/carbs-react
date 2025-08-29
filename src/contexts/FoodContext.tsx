@@ -17,7 +17,7 @@ interface FoodProviderProps {
 }
 
 export const FoodProvider: React.FC<FoodProviderProps> = ({ children }) => {
-  const [food, setFood] = useState<number>(0);
+  const [food, setFood] = useState<number | null>(null);
   const [portion, setPortion] = useState<string>("");
 
   return (

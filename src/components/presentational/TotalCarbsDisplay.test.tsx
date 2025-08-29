@@ -39,7 +39,7 @@ describe("TotalCarbsDisplay", () => {
       "text-center",
       "rounded-lg",
       "p-3",
-      "mt-4",
+      "my-6",
       "shadow",
     );
   });

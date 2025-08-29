@@ -10,9 +10,19 @@ const renderWithProvider = (component: React.ReactElement) => {
 
 describe("TotalCarbs", () => {
   test("renders TotalCarbsDisplay component", () => {
-    renderWithProvider(<TotalCarbs />);
+    const mockUseFood = jest.spyOn(FoodContext, "useFood").mockReturnValue({
+      food: 0, // Pre-select a food
+      setFood: jest.fn(),
+      portion: "100",
+      setPortion: jest.fn(),
+      foods: [{ label: "Test Food", value: 50, tags: [] }],
+    });
+
+    render(<TotalCarbs />);
 
     expect(screen.getByText(/carbs per/i)).toBeInTheDocument();
+
+    mockUseFood.mockRestore();
   });
 
   test("calculates and displays total carbs correctly", () => {

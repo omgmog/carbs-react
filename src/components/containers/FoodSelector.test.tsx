@@ -26,9 +26,17 @@ describe("FoodSelector", () => {
     expect(optgroups.length).toBeGreaterThan(0);
   });
 
-  test("shows carbohydrate information for selected food", () => {
+  test("shows carbohydrate information for selected food", async () => {
     renderWithProvider(<FoodSelector />);
 
+    // Initially no carb info should be shown
+    expect(screen.queryByText(/carbs per 100/)).not.toBeInTheDocument();
+
+    // Select a food
+    const select = screen.getByLabelText(/food type/i);
+    await userEvent.selectOptions(select, "0");
+
+    // Now carb info should be shown
     expect(screen.getByText(/carbs per 100/)).toBeInTheDocument();
   });
 
@@ -41,14 +49,22 @@ describe("FoodSelector", () => {
     expect(select).toHaveValue("1");
   });
 
-  test("displays correct unit (g or ml) based on food type", () => {
+  test("displays correct unit (g or ml) based on food type", async () => {
     renderWithProvider(<FoodSelector />);
+
+    // Select a food that uses grams
+    const select = screen.getByLabelText(/food type/i);
+    await userEvent.selectOptions(select, "0"); // Potato should use grams
 
     expect(screen.getByText(/per 100 g/)).toBeInTheDocument();
   });
 
-  test("shows link to add more food types", () => {
+  test("shows link to add more food types", async () => {
     renderWithProvider(<FoodSelector />);
+
+    // Select a food first to make the link appear
+    const select = screen.getByLabelText(/food type/i);
+    await userEvent.selectOptions(select, "0");
 
     const link = screen.getByRole("link", { name: /add another food type/i });
     expect(link).toBeInTheDocument();
@@ -57,5 +73,13 @@ describe("FoodSelector", () => {
       "https://github.com/omgmog/carbs-react/edit/main/src/constants/foods.ts",
     );
     expect(link).toHaveAttribute("target", "_blank");
+  });
+
+  test("shows 'No food' option as default", () => {
+    renderWithProvider(<FoodSelector />);
+
+    const select = screen.getByLabelText(/food type/i);
+    expect(select).toHaveValue("");
+    expect(screen.getByRole("option", { name: "No food" })).toBeInTheDocument();
   });
 });

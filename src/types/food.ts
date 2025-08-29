@@ -26,8 +26,8 @@ export interface Food {
 }
 
 export interface FoodContextType {
-  food: number; // index into foods list
-  setFood: (index: number) => void;
+  food: number | null; // index into foods list, or null for no food
+  setFood: (index: number | null) => void;
   portion: string; // user's portion (grams or ml, depending on food tags)
   setPortion: (size: string) => void;
   foods: Food[];
