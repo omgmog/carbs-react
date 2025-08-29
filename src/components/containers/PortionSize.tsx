@@ -1,40 +1,28 @@
-import React, { useRef, useEffect } from 'react';
-import { useFood } from '../../contexts/FoodContext';
+import React from "react";
+import { useFood } from "../../contexts/FoodContext";
+import { displayUnit } from "../../utils/calculations";
 
 const PortionSize: React.FC = () => {
-    const { portion, setPortion } = useFood();
-    const fieldRef = useRef<HTMLInputElement>(null);
+  const { food, foods, portion, setPortion } = useFood();
+  const selected = foods?.[food];
+  const unit = displayUnit(selected); // "g" or "ml"
 
-    useEffect(() => {
-        fieldRef.current?.focus();
-    }, []);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        // Allow empty string or numbers only
-        if (value === '' || /^\d*$/.test(value)) {
-            setPortion(value);
-        }
-    };
-
-    return (
-        <div className="field">
-            <label className="label" htmlFor="portion">Portion size (g):</label>
-            <div className="control is-expanded">
-                <input 
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    className="input" 
-                    value={portion} 
-                    onChange={handleChange}
-                    ref={fieldRef}
-                    id="portion"
-                    placeholder="Enter portion size"
-                />
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <label className="block text-sm font-bold mb-1" htmlFor="portion">
+        Portion ({unit})
+      </label>
+      <input
+        id="portion"
+        type="number"
+        step="1"
+        value={portion}
+        onChange={(e) => setPortion(e.target.value)}
+        className="block w-full rounded border p-2"
+        placeholder={`Enter amount in ${unit}`}
+      />
+    </div>
+  );
 };
 
-export default PortionSize; 
+export default PortionSize;

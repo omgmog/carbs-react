@@ -2,9 +2,9 @@ name: Deploy React App
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 # Add permissions for the GitHub Actions bot
 permissions:
@@ -25,8 +25,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -42,4 +42,4 @@ jobs:
           folder: build
           clean: true
           commit-message: "Deploy carbs-react to carbs.omgmog.net"
-          preserve: true 
+          preserve: true
