@@ -191,21 +191,8 @@ const Tooltip: React.FC<TooltipProps> = ({
     };
   }, []);
 
-  const getArrowClasses = (pos: "top" | "bottom" | "left" | "right") => {
-    switch (pos) {
-      case "top":
-        return "border-l-transparent border-r-transparent border-b-transparent border-t-gray-900";
-      case "bottom":
-        return "border-l-transparent border-r-transparent border-t-transparent border-b-gray-900";
-      case "left":
-        return "border-t-transparent border-b-transparent border-r-transparent border-l-gray-900";
-      case "right":
-        return "border-t-transparent border-b-transparent border-l-transparent border-r-gray-900";
-    }
-  };
-
   return (
-    <div className={`relative inline-block ${className}`}>
+    <div className={`relative inline-block select-none ${className}`}>
       <div
         ref={triggerRef}
         onMouseEnter={showTooltip}
@@ -233,15 +220,6 @@ const Tooltip: React.FC<TooltipProps> = ({
           onMouseLeave={hideTooltip}
         >
           {content}
-          {/* Tooltip arrow */}
-          <div
-            className={`absolute w-0 h-0 border-4 ${getArrowClasses(tooltipPosition.position)}`}
-            style={{
-              top: tooltipPosition.arrowTop !== undefined ? `${tooltipPosition.arrowTop}px` : undefined,
-              left: tooltipPosition.arrowLeft !== undefined ? `${tooltipPosition.arrowLeft}px` : undefined,
-            }}
-            aria-hidden="true"
-          />
         </div>
       )}
     </div>
