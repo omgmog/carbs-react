@@ -7,8 +7,6 @@ describe("App Component", () => {
     render(<App />);
 
     expect(screen.getByLabelText(/food type/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/portion \(g\)/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/carbs per/i)[0]).toBeInTheDocument();
     expect(screen.getByText(/suggested dose/i)).toBeInTheDocument();
   });
 
@@ -16,9 +14,12 @@ describe("App Component", () => {
     render(<App />);
 
     const foodSelect = screen.getByLabelText(/food type/i);
-    const portionInput = screen.getByLabelText(/portion \(g\)/i);
-
+    
+    // First select a food to make portion input appear
     await userEvent.selectOptions(foodSelect, "1");
+    
+    // Now the portion input should be available
+    const portionInput = screen.getByLabelText(/portion \(g\)/i);
     await userEvent.type(portionInput, "100");
 
     expect(portionInput).toHaveValue(100);
@@ -28,9 +29,12 @@ describe("App Component", () => {
     render(<App />);
 
     const foodSelect = screen.getByLabelText(/food type/i);
-    const portionInput = screen.getByLabelText(/portion \(g\)/i);
-
+    
+    // First select a food to make portion input appear
     await userEvent.selectOptions(foodSelect, "1");
+    
+    // Now the portion input should be available
+    const portionInput = screen.getByLabelText(/portion \(g\)/i);
     await userEvent.type(portionInput, "100");
 
     expect(screen.getByText(/carbs per 100g/i)).toBeInTheDocument();

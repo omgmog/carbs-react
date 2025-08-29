@@ -25,7 +25,7 @@ describe("FoodContext", () => {
       </FoodProvider>,
     );
 
-    expect(screen.getByTestId("food-index")).toHaveTextContent("0");
+    expect(screen.getByTestId("food-index")).toHaveTextContent("");
     expect(screen.getByTestId("portion")).toHaveTextContent("");
     expect(screen.getByTestId("foods-count")).toHaveTextContent(/\d+/);
   });

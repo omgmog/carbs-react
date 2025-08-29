@@ -1,6 +1,5 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import Tooltip from "./Tooltip";
 
 describe("Tooltip", () => {
@@ -113,7 +112,10 @@ describe("Tooltip", () => {
       fireEvent.focus(trigger);
       const tooltip = screen.getByRole("tooltip");
       
-      expect(tooltip).toHaveClass("top-full", "left-1/2", "transform", "-translate-x-1/2", "mt-2");
+      expect(tooltip).toHaveClass("fixed", "z-50", "pointer-events-none");
+      expect(tooltip).toHaveAttribute("style");
+      expect(tooltip.getAttribute("style")).toMatch(/top:\s*\d+px/);
+      expect(tooltip.getAttribute("style")).toMatch(/left:\s*\d+px/);
     }
   });
 
